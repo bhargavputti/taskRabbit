@@ -11,6 +11,8 @@ app.set("views engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 app.use(methodOverride("_method"));
 
+
+//establishing connection
 const dbUrl = "mongodb://localhost:27017/taskRabbit";
 main()
 	.then(() => {
@@ -23,7 +25,9 @@ main()
 async function main() {
 	await mongoose.connect(dbUrl);
 }
-//for users
+
+
+//SignUp page
 app.get("/", (req, res) => {
 	res.render("signup.ejs");
 });
@@ -33,6 +37,8 @@ app.get("/", (req, res) => {
 // 	res.render("signup.ejs");
 // });
 
+//create user
+//saving users data in the database
 app.post("/savedb", async (req, res) => {
 	let { username, email, password } = req.body;
 	let newUser = new User({
@@ -54,6 +60,7 @@ app.post("/savedb", async (req, res) => {
 	res.redirect(`/tasks/${tasks._id}`);
 });
 
+//get task based on user_id
 app.get("/tasks/:id", async (req, res)=>{
   let{id} = req.params;
   let{ tasks } = await User.find({id});
